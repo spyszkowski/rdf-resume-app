@@ -409,7 +409,10 @@ enter.append('text').text('This is some information about whatever')
     let openedListsMap = new Map();
 
     async function fetchNodes() {
-      fetch("http://localhost:3033/graph-repository", {
+      let prodUrl="https://rdf-resume.herokuapp.com/graph-repository";
+      let localUrl="http://localhost:3033/graph-repository";
+
+      fetch(prodUrl, {
         headers: new Headers({ "Content-Type": "application/json" }),
         method: "POST",
         body: JSON.stringify({
