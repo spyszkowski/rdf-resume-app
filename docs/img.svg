@@ -1,0 +1,139 @@
+<svg class="chart" viewBox="-400,-200,800,400">
+    <g fill="none" stroke="#000" stroke-opacity="0.2">
+        <path class="link http://rdfs.org/resume-rdf/cv.rdfs#aboutPerson" id="linkId_0" marker-end="url(#http://rdfs.org/resume-rdf/cv.rdfs#aboutPerson)" d="M30.581667600364153,180.47954094279643L46.9525493899104,44.569588528632934"></path>
+        <path class="link http://rdfs.org/resume-rdf/cv.rdfs#hasWorkHistory" id="linkId_1" marker-end="url(#http://rdfs.org/resume-rdf/cv.rdfs#hasWorkHistory)" d="M-14.22252752427673,-84.7819140661384L46.9525493899104,44.569588528632934"></path>
+        <path class="link http://xmlns.com/foaf/0.1/gender" id="linkId_2" marker-end="url(#http://xmlns.com/foaf/0.1/gender)" d="M30.581667600364153,180.47954094279643L162.38838214805008,180.67633279433002"></path>
+        <path class="link http://schema.org/birthPlace" id="linkId_3" marker-end="url(#http://schema.org/birthPlace)" d="M-44.995556700616454,282.3743325335608L30.581667600364153,180.47954094279643"></path>
+        <path class="link http://rdfs.org/resume-rdf/cv.rdfs#hasNationality" id="linkId_4" marker-end="url(#http://rdfs.org/resume-rdf/cv.rdfs#hasNationality)" d="M-105.2986743256938,158.0289559400199L30.581667600364153,180.47954094279643"></path>
+        <path class="link http://rdfs.org/resume-rdf/cv.rdfs#jobType" id="linkId_5" marker-end="url(#http://rdfs.org/resume-rdf/cv.rdfs#jobType)" d="M-142.1209664442341,-37.73093384189328L-14.22252752427673,-84.7819140661384"></path>
+        <path class="link http://rdfs.org/resume-rdf/cv.rdfs#employedIn" id="linkId_6" marker-end="url(#http://rdfs.org/resume-rdf/cv.rdfs#employedIn)" d="M-14.22252752427673,-84.7819140661384L-3.1733576479829875,-219.19900837721522"></path>
+        <path class="link http://rdfs.org/resume-rdf/cv.rdfs#startDate" id="linkId_7" marker-end="url(#http://rdfs.org/resume-rdf/cv.rdfs#startDate)" d="M-14.22252752427673,-84.7819140661384L98.93225884915853,-162.9702401036702"></path>
+        <path class="link http://rdfs.org/resume-rdf/cv.rdfs#endDate" id="linkId_8" marker-end="url(#http://rdfs.org/resume-rdf/cv.rdfs#endDate)" d="M-125.27628968334214,-163.70493553522712L-14.22252752427673,-84.7819140661384"></path>
+        <path class="link http://rdfs.org/resume-rdf/cv.rdfs#jobDescription" id="linkId_9" marker-end="url(#http://rdfs.org/resume-rdf/cv.rdfs#jobDescription)" d="M-14.22252752427673,-84.7819140661384L125.10254864857615,-69.10589100922705"></path>
+    </g>
+    <g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder"></g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_0">aboutPerson</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_1">hasWorkHistory</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_2">gender</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_3">birthPlace</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_4">hasNationality</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_5">jobType</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_6">employedIn</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_7">startDate</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_8">endDate</textPath>
+            </text>
+        </g>
+        <g class="linklabelholder">
+            <text class="linklabel" x="40" y="-25" text-anchor="start" style="font-size: 10px; stroke-width: 0.5px; fill: rgb(0, 0, 0);">
+                <textPath xlink:href="#linkId_9">jobDescription</textPath>
+            </text>
+        </g>
+    </g>
+    <g stroke="#fff" stroke-width="1">
+        <g class="chart_group" transform="translate(46.9525493899104,44.569588528632934)">
+            <circle r="6" fill="#4e79a7" style="fill: rgb(118, 183, 178);"></circle>
+            <text x="8" y="3" style="font-weight: bold;">cv</text>
+            <title>https://pyszkowski.com/cv</title>
+        </g>
+        <g class="chart_group" transform="translate(30.581667600364153,180.47954094279643)">
+            <circle r="6" fill="#f28e2c" style="fill: rgb(118, 183, 178);"></circle>
+            <text x="8" y="3" style="font-weight: bold;">me</text>
+            <title>https://pyszkowski.com/me</title>
+        </g>
+        <g class="chart_group" transform="translate(-14.22252752427673,-84.7819140661384)">
+            <circle r="6" fill="#e15759" style="fill: rgb(118, 183, 178);"></circle>
+            <text x="8" y="3" style="font-weight: bold;">Empolis</text>
+            <title>https://pyszkowski.com/workHistory/Empolis</title>
+        </g>
+        <g class="chart_group" transform="translate(162.38838214805008,180.67633279433002)">
+            <circle r="6" fill="#bab0ab"></circle>
+            <text x="8" y="3" style="font-weight: bold;">man</text>
+            <title>"man"^^http://www.w3.org/2000/01/rdf-schema#Literal</title>
+        </g>
+        <g class="chart_group" transform="translate(-44.995556700616454,282.3743325335608)">
+            <circle r="6" fill="#4e79a7"></circle>
+            <text x="8" y="3" style="font-weight: bold;">Szczecin</text>
+            <title>https://en.wikipedia.org/wiki/Szczecin</title>
+        </g>
+        <g class="chart_group" transform="translate(-105.2986743256938,158.0289559400199)">
+            <circle r="6" fill="#f28e2c"></circle>
+            <text x="8" y="3" style="font-weight: bold;">Polish</text>
+            <title>"Polish"^^http://www.w3.org/2000/01/rdf-schema#Literal</title>
+        </g>
+        <g class="chart_group" transform="translate(-142.1209664442341,-37.73093384189328)">
+            <circle r="6" fill="#59a14f"></circle>
+            <text x="8" y="3" style="font-weight: bold;">Senior Information Manager</text>
+            <title>"Senior Information Manager"^^http://www.w3.org/2000/01/rdf-schema#Literal</title>
+        </g>
+        <g class="chart_group" transform="translate(-3.1733576479829875,-219.19900837721522)">
+            <circle r="6" fill="#edc949"></circle>
+            <text x="8" y="3" style="font-weight: bold;">www.empolis.com</text>
+            <title>https://www.empolis.com</title>
+        </g>
+        <g class="chart_group" transform="translate(98.93225884915853,-162.9702401036702)">
+            <circle r="6" fill="#af7aa1"></circle>
+            <text x="8" y="3" style="font-weight: bold;">1999-01-01</text>
+            <title>"1999-01-01"^^http://www.w3.org/2001/XMLSchema#date</title>
+        </g>
+        <g class="chart_group" transform="translate(-125.27628968334214,-163.70493553522712)">
+            <circle r="6" fill="#ff9da7" style="fill: rgb(118, 183, 178);"></circle>
+            <text x="8" y="3" style="font-weight: bold;">2009-11-26</text>
+            <title>"2009-11-26"^^http://www.w3.org/2001/XMLSchema#date</title>
+        </g>
+        <g class="chart_group" transform="translate(125.10254864857615,-69.10589100922705)">
+            <circle r="6" fill="#9c755f"></circle>
+            <text x="8" y="3" style="font-weight: bold;">structured data organisation, reasoning, coding</text>
+            <title>"structured data organisation, reasoning, coding"</title>
+        </g>
+    </g>
+</svg>
