@@ -30,3 +30,6 @@ npm install --save sparql-engine
 
 --for missing nodejs packages
 npm install --save-dev rollup-plugin-node-polyfills
+
+
+GITHUB_PAGES_ACCESS_TOKEN  -> GHP_ACCESS_TOKEN

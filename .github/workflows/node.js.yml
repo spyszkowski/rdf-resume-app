@@ -26,7 +26,7 @@ jobs:
     - name: Publish page
       uses: peaceiris/actions-gh-pages@v2.5.0
       env:
-        PERSONAL_TOKEN: ${{ secrets.GITHUB_PAGES_ACCESS_TOKEN }}
+        PERSONAL_TOKEN: ${{ secrets.GHP_ACCESS_TOKEN }}
         EXTERNAL_REPOSITORY: spyszkowski/spyszkowski.github.io
         PUBLISH_BRANCH: main
         PUBLISH_DIR: public
