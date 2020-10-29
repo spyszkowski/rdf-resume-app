@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { onDestroy } from "svelte";
   import * as d3 from "d3";
+  import {component} from "d3-component";
 
   let simulation;
 
@@ -412,7 +413,7 @@ enter.append('text').text('This is some information about whatever')
       let prodUrl="https://rdf-resume.herokuapp.com/graph-repository";
       let localUrl="http://localhost:3033/graph-repository";
 
-      fetch(prodUrl, {
+      return fetch(prodUrl, {
         headers: new Headers({ "Content-Type": "application/json" }),
         method: "POST",
         body: JSON.stringify({
@@ -463,7 +464,8 @@ enter.append('text').text('This is some information about whatever')
       })
         .then((r) => r.json())
         .then((graph) => {
-          chart.update(graph);
+          //chart.update(graph);
+          return graph;
         });
     }
 
@@ -514,7 +516,8 @@ enter.append('text').text('This is some information about whatever')
           }
         }
       }
-      await fetchNodes();
+      let graph=await fetchNodes();
+      chart.update(graph);
     }
 
     function prepareNodeRelations(nodes, links) {
@@ -597,15 +600,115 @@ enter.append('text').text('This is some information about whatever')
     //   ],
     // };
 
-    // chart.update(graph1);
-    await fetchNodes();
+      // @@@@@@@@@@@@@@@@ spinner
+          // The stuff below uses d3-component to display a spinner
+    // while the data loads, then render the visualization after loading.
+    
+    // This stateless component renders a static "wheel" made of circles,
+    // and rotates it depending on the value of props.angle.
+    
+    // This function visualizes the data.
+    function visualize(selection, data){
+      chart.update(data);
+    }
+ 
+    // The stuff below uses d3-component to display a spinner
+    // while the data loads, then render the visualization after loading.
+    
+    // This stateless component renders a static "wheel" made of circles,
+    // and rotates it depending on the value of props.angle.
+    var wheel = component("g")
+      .create(function (selection){
+        var minRadius = 4,
+            maxRadius = 10,
+            numDots = 10,
+            wheelRadius = 40,
+            rotation = 0,
+            rotationIncrement = 3, 
+            radius = d3.scaleLinear()
+              .domain([0, numDots - 1])
+              .range([maxRadius, minRadius]),
+            angle = d3.scaleLinear()
+              .domain([0, numDots])
+              .range([0, Math.PI * 2]);
+        selection
+          .selectAll("circle").data(d3.range(numDots))
+          .enter().append("circle")
+            .attr("cx", d => Math.round(Math.sin(angle(d)) * wheelRadius))
+            .attr("cy", d => Math.round(Math.cos(angle(d)) * wheelRadius))
+            .attr("r", d => Math.round(radius(d)));
+      })
+      .render(function (selection, d){
+        selection.attr("transform", "rotate(" + d + ")");
+      });
+    
+    // This component with a local timer makes the wheel spin.
+    var spinner = (function (){
+      var timer = d3.local();
+      return component("g")
+        .create(function (selection, d){
+          timer.set(selection.node(), d3.timer(function (elapsed){
+            selection.call(wheel, elapsed * d.speed);
+          }));
+        })
+        .render(function (selection, d){
+          selection.attr("transform", "translate(" + d.x + "," + d.y + ")");
+        })
+        .destroy(function(selection, d){
+          timer.get(selection.node()).stop();
+        	return selection
+          	// 	.attr("fill-opacity", 1)
+          	// .transition().duration(3000)
+          	// 	.attr("transform", "translate(" + d.x + "," + d.y + ") scale(10)")
+          	// 	.attr("fill-opacity", 0);
+        });
+    }());
+    
+    // This component displays the visualization.
+    var visualization = component("g")
+    	.render(function (selection, d){
+        selection.call(visualize, d.data);
+      });
+    
+    // This component manages an svg element, and
+    // either displays a spinner or text,
+    // depending on the value of the `loading` state.
+    var app = component("g")
+      .render(function (selection, d){
+        selection
+            .call(spinner, !d.loading ? [] : {
+              x: d.width / 2,
+              y: d.height / 2,
+              speed: 0.2
+            })
+            .call(visualization, d.loading ? [] : d);
+      });
+    
+    // Kick off the app.
+    function main(){
+      var svg = d3.select("svg"),
+          width = svg.attr("width"),
+          height = svg.attr("height");
 
-    // setTimeout(() => {
-    //   chart.update(graph1);
-    // }, 0);
+      // Initialize the app to be "loading".
+      svg.call(app, {
+        width: width,
+        height: height,
+        loading: true
+      });
 
-    // setTimeout(()=>{
-    // chart.update(graph1)}, 6000);
+      // Invoke the data fetching logic.
+      fetchNodes().then((function (data){
+        svg.call(app, {
+          width: width,
+          height: height,
+          loading: false,
+          data: data
+        });
+      }));
+    }
+    main();
+
   }); //end mount
 
   onDestroy(() => 
