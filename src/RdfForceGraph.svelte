@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { onDestroy } from "svelte";
   import * as d3 from "d3";
-  import {component} from "d3-component";
+  import { component } from "d3-component";
 
   let simulation;
 
@@ -11,14 +11,14 @@
     //let width = 800;
     //let height = 350;
 
-    var width = window.innerWidth,///2,
-            height = window.innerHeight;///2;
+    var width = window.innerWidth, ///2,
+      height = window.innerHeight; ///2;
 
     let svg = d3
       .select("#chart")
       .append("svg")
       .attr("class", "chart")
-      .attr("viewBox", [-width , -height, width*2, height*2]);
+      .attr("viewBox", [-width, -height, width * 2, height * 2]);
     //   let svg = d3.select("svg");
     //  svg.attr("viewBox", [-width / 2, -height / 2, width, height]);
 
@@ -94,13 +94,13 @@
         rely = this.getBBox().height / 2; //vertical text aligment
         if (d.source.x > d.target.x) {
           //lablel on the left side of the node
-          relx = -( (this.getBBox().width /2 ) + r + xdistance);
+          relx = -(this.getBBox().width / 2 + r + xdistance);
         } else {
           //lablel on the right side of the node
-          relx = this.getBBox().width /2 + r + xdistance;
+          relx = this.getBBox().width / 2 + r + xdistance;
         }
         // relx=0;
-          rely=0;
+        rely = 0;
         return (
           "translate(" + (d.target.x + relx) + "," + (d.target.y - rely) + ")"
         );
@@ -193,9 +193,9 @@
               .attr("fill", (d) => color(d.id))
               .on("click", clicked)
               .on("mouseover", function (d, n) {
-                if(isOpened(n.id)){
+                if (isOpened(n.id)) {
                   d3.select(this).style("fill", "gray");
-                }else{
+                } else {
                   d3.select(this).style("fill", "red");
                 }
               })
@@ -275,28 +275,26 @@ enter.append('text').text('This is some information about whatever')
               .style("font-weight", "bold")
               // .attr("x", "50%")
               .attr("y", 0)
-              .attr("text-anchor", "middle")
-             // .attr("dominant-baseline", "middle");
+              .attr("text-anchor", "middle");
+            // .attr("dominant-baseline", "middle");
 
-              //node sub label
+            //node sub label
 
-              enter
+            enter
               .append("text")
               .text(function (d) {
                 //comment is only shown for not opened nodes, because it visualy overlaps opened nodes
-                  if(!isOpened(d.target)){
-                    return nodeById.get(d.target).comment;
-                  }else{
-                    return undefined;
-                  }
-
+                if (!isOpened(d.target)) {
+                  return nodeById.get(d.target).comment;
+                } else {
+                  return undefined;
+                }
               })
               .style("font-size", "8px")
               // .attr("x", "50%")
               .attr("y", 14)
-              .attr("text-anchor", "middle")
+              .attr("text-anchor", "middle");
             //  .attr("dominant-baseline", "middle");
-
 
             return enter;
           });
@@ -398,7 +396,7 @@ enter.append('text').text('This is some information about whatever')
       return openedNodes.has(id) || openedLists.has(id);
     }
 
-    let rootNodeId="https://pyszkowski.com/cv";
+    let rootNodeId = "https://pyszkowski.com/cv";
 
     let openedNodes = new Set();
     openedNodes.add(rootNodeId); // pys:me
@@ -410,8 +408,8 @@ enter.append('text').text('This is some information about whatever')
     let openedListsMap = new Map();
 
     async function fetchNodes() {
-      let prodUrl="https://rdf-resume.herokuapp.com/graph-repository";
-      let localUrl="http://localhost:3033/graph-repository";
+      let prodUrl = "https://rdf-resume.herokuapp.com/graph-repository";
+      let localUrl = "http://localhost:3033/graph-repository";
 
       return fetch(prodUrl, {
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -436,16 +434,23 @@ enter.append('text').text('This is some information about whatever')
           ?s ?p ?o 
           OPTIONAL {?o <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?t .}
           OPTIONAL {?o <http://www.w3.org/1999/02/22-rdf-syntax-ns#comment> ?c .}
-        }` 
-        +
-        Array.from(openedListsMap.entries()).map(([baseSubject, predicate]) => `
-    UNION
+        }` +
+            Array.from(openedListsMap.entries())
+              .map(([baseSubject, predicates]) =>
+                Array.from(predicates)
+                  .map(
+                    (predicate) =>
+                      `
+      UNION
     {
       values (?s ?p) { (<${baseSubject}> <${predicate}>) } 
      ?s ?p ?o .
       ?s <${predicate}>/<http://www.w3.org/1999/02/22-rdf-syntax-ns#rest>*/<http://www.w3.org/1999/02/22-rdf-syntax-ns#first>  ?l .
     }`
-            ).join("\n") +
+                  )
+                  .join("\n")
+              )
+              .join("\n") +
             `}`,
 
           // `
@@ -469,20 +474,34 @@ enter.append('text').text('This is some information about whatever')
         });
     }
 
-    function closeChildrenNodes(nodeId, depth){
-      if(openedNodes.has(nodeId)){
+    function closeChildrenNodes(nodeId, depth) {
+      if (openedNodes.has(nodeId)) {
         let node = nodeById.get(nodeId);
-        if(node.sourceLinks){
-          node.sourceLinks.forEach(link=> closeChildrenNodes(link.target, depth + 1));
+        if (node.sourceLinks) {
+          node.sourceLinks.forEach((link) =>
+            closeChildrenNodes(link.target, depth + 1)
+          );
         }
-        if(nodeId !== rootNodeId){
+        if (nodeId !== rootNodeId) {
           openedNodes.delete(nodeId);
         }
       }
-      if(openedListsMap.has(nodeId)){
+      if (openedListsMap.has(nodeId)) {
+        let node = nodeById.get(nodeId);
+        if (node.sourceLinks) {
+          node.sourceLinks.forEach((link) =>
+            closeChildrenNodes(link.target, depth + 1)
+          );
+        }
         openedListsMap.delete(nodeId);
       }
-      if(openedLists.has(nodeId)){
+      if (openedLists.has(nodeId)) {
+        let node = nodeById.get(nodeId);
+        if (node.sourceLinks) {
+          node.sourceLinks.forEach((link) =>
+            closeChildrenNodes(link.target, depth + 1)
+          );
+        }
         openedLists.delete(nodeId);
       }
     }
@@ -500,23 +519,35 @@ enter.append('text').text('This is some information about whatever')
         }
       }
       //(<https://pyszkowski.com/workHistory/Empolis> <http://rdfs.org/resume-rdf/cv.rdfs#jobDescription>)
-      if (d.termType === "BlankNode") { //todo: proper check it is a list
+      if (d.termType === "BlankNode") {
+        //todo: proper check it is a list
         if (d.targetLinks && d.targetLinks.size == 1) {
           let nodeId = d.id;
           let targetLink = d.targetLinks.values().next().value;
           let baseSubject = targetLink.source;
           let predicate = targetLink.type;
-          if(openedListsMap.has(baseSubject))
-          {
-            openedLists.delete(nodeId);//used only to speed up search
-            openedListsMap.delete(baseSubject)
-          }else{
+          let listPredicates;
+          if (openedListsMap.has(baseSubject)) {
+            //openedLists.delete(nodeId);//used only to speed up search
+            listPredicates = openedListsMap.get(baseSubject);
+          }else {
+            //create initial set of predicates
+            listPredicates = new Set();
+            openedListsMap.set(baseSubject, listPredicates);
+          }
+
+          if (listPredicates.has(predicate)) {
+            //openedListsMap.delete(baseSubject)
+            listPredicates.delete(predicate);
+            closeChildrenNodes(nodeId);
+          } else {
             openedLists.add(nodeId);
-          openedListsMap.set(baseSubject, predicate);
+            //openedListsMap.set(baseSubject, predicate);
+            listPredicates.add(predicate);
           }
         }
       }
-      let graph=await fetchNodes();
+      let graph = await fetchNodes();
       chart.update(graph);
     }
 
@@ -564,6 +595,8 @@ enter.append('text').text('This is some information about whatever')
           return "\uf1ad";
         case "http://rdfs.org/resume-rdf/cv.rdfs#CV":
           return "\uf508";
+        case "http://www.w3.org/1999/02/22-rdf-syntax-ns#Education":
+          return "\uf19d";
       }
 
       switch (linkType) {
@@ -586,6 +619,14 @@ enter.append('text').text('This is some information about whatever')
           return "\uf3c5";
         case "http://rdfs.org/resume-rdf/cv.rdfs#jobDescription":
           return "\uf0ae";
+        case "http://rdfs.org/resume-rdf/cv.rdfs#hasSkill":
+          return "\uf568"; //"\uf5ae";
+        case "http://rdfs.org/resume-rdf/cv.rdfs#skillLevel":
+          return "\uf005";
+        case "http://rdfs.org/resume-rdf/cv.rdfs#hasWorkHistory":
+          return "\uf2b5"; // "\uf508"; // "\uf64a";
+        case "http://rdfs.org/resume-rdf/cv.rdfs#hasLanguageSkill":
+          return "\uf1ab";
       }
 
       return "\uf083";
@@ -600,121 +641,130 @@ enter.append('text').text('This is some information about whatever')
     //   ],
     // };
 
-      // @@@@@@@@@@@@@@@@ spinner
-          // The stuff below uses d3-component to display a spinner
-    // while the data loads, then render the visualization after loading.
-    
-    // This stateless component renders a static "wheel" made of circles,
-    // and rotates it depending on the value of props.angle.
-    
-    // This function visualizes the data.
-    function visualize(selection, data){
-      chart.update(data);
-    }
- 
+    // @@@@@@@@@@@@@@@@ spinner
     // The stuff below uses d3-component to display a spinner
     // while the data loads, then render the visualization after loading.
-    
+
+    // This stateless component renders a static "wheel" made of circles,
+    // and rotates it depending on the value of props.angle.
+
+    // This function visualizes the data.
+    function visualize(selection, data) {
+      chart.update(data);
+    }
+
+    // The stuff below uses d3-component to display a spinner
+    // while the data loads, then render the visualization after loading.
+
     // This stateless component renders a static "wheel" made of circles,
     // and rotates it depending on the value of props.angle.
     var wheel = component("g")
-      .create(function (selection){
+      .create(function (selection) {
         var minRadius = 4,
-            maxRadius = 10,
-            numDots = 10,
-            wheelRadius = 40,
-            rotation = 0,
-            rotationIncrement = 3, 
-            radius = d3.scaleLinear()
-              .domain([0, numDots - 1])
-              .range([maxRadius, minRadius]),
-            angle = d3.scaleLinear()
-              .domain([0, numDots])
-              .range([0, Math.PI * 2]);
+          maxRadius = 10,
+          numDots = 10,
+          wheelRadius = 40,
+          rotation = 0,
+          rotationIncrement = 3,
+          radius = d3
+            .scaleLinear()
+            .domain([0, numDots - 1])
+            .range([maxRadius, minRadius]),
+          angle = d3
+            .scaleLinear()
+            .domain([0, numDots])
+            .range([0, Math.PI * 2]);
         selection
-          .selectAll("circle").data(d3.range(numDots))
-          .enter().append("circle")
-            .attr("cx", d => Math.round(Math.sin(angle(d)) * wheelRadius))
-            .attr("cy", d => Math.round(Math.cos(angle(d)) * wheelRadius))
-            .attr("r", d => Math.round(radius(d)));
+          .selectAll("circle")
+          .data(d3.range(numDots))
+          .enter()
+          .append("circle")
+          .attr("cx", (d) => Math.round(Math.sin(angle(d)) * wheelRadius))
+          .attr("cy", (d) => Math.round(Math.cos(angle(d)) * wheelRadius))
+          .attr("r", (d) => Math.round(radius(d)));
       })
-      .render(function (selection, d){
+      .render(function (selection, d) {
         selection.attr("transform", "rotate(" + d + ")");
       });
-    
+
     // This component with a local timer makes the wheel spin.
-    var spinner = (function (){
+    var spinner = (function () {
       var timer = d3.local();
       return component("g")
-        .create(function (selection, d){
-          timer.set(selection.node(), d3.timer(function (elapsed){
-            selection.call(wheel, elapsed * d.speed);
-          }));
+        .create(function (selection, d) {
+          timer.set(
+            selection.node(),
+            d3.timer(function (elapsed) {
+              selection.call(wheel, elapsed * d.speed);
+            })
+          );
         })
-        .render(function (selection, d){
+        .render(function (selection, d) {
           selection.attr("transform", "translate(" + d.x + "," + d.y + ")");
         })
-        .destroy(function(selection, d){
+        .destroy(function (selection, d) {
           timer.get(selection.node()).stop();
-        	return selection
-          	// 	.attr("fill-opacity", 1)
-          	// .transition().duration(3000)
-          	// 	.attr("transform", "translate(" + d.x + "," + d.y + ") scale(10)")
-          	// 	.attr("fill-opacity", 0);
+          return selection;
+          // 	.attr("fill-opacity", 1)
+          // .transition().duration(3000)
+          // 	.attr("transform", "translate(" + d.x + "," + d.y + ") scale(10)")
+          // 	.attr("fill-opacity", 0);
         });
-    }());
-    
+    })();
+
     // This component displays the visualization.
-    var visualization = component("g")
-    	.render(function (selection, d){
-        selection.call(visualize, d.data);
-      });
-    
+    var visualization = component("g").render(function (selection, d) {
+      selection.call(visualize, d.data);
+    });
+
     // This component manages an svg element, and
     // either displays a spinner or text,
     // depending on the value of the `loading` state.
-    var app = component("g")
-      .render(function (selection, d){
-        selection
-            .call(spinner, !d.loading ? [] : {
-              x: d.width / 2,
-              y: d.height / 2,
-              speed: 0.2
-            })
-            .call(visualization, d.loading ? [] : d);
-      });
-    
+    var app = component("g").render(function (selection, d) {
+      selection
+        .call(
+          spinner,
+          !d.loading
+            ? []
+            : {
+                x: d.width / 2,
+                y: d.height / 2,
+                speed: 0.2,
+              }
+        )
+        .call(visualization, d.loading ? [] : d);
+    });
+
     // Kick off the app.
-    function main(){
+    function main() {
       var svg = d3.select("svg"),
-          width = svg.attr("width"),
-          height = svg.attr("height");
+        width = svg.attr("width"),
+        height = svg.attr("height");
 
       // Initialize the app to be "loading".
       svg.call(app, {
         width: width,
         height: height,
-        loading: true
+        loading: true,
       });
 
       // Invoke the data fetching logic.
-      fetchNodes().then((function (data){
+      fetchNodes().then(function (data) {
         svg.call(app, {
           width: width,
           height: height,
           loading: false,
-          data: data
+          data: data,
         });
-      }));
+      });
     }
     main();
-
   }); //end mount
 
-  onDestroy(() => 
-  {if(simulation){
-    simulation.stop();
-  }
+  onDestroy(() => {
+    if (simulation) {
+      simulation.stop();
+    }
   });
 </script>
 
@@ -732,7 +782,6 @@ enter.append('text').text('This is some information about whatever')
     border-width: 1px;
     background: #f6fafd content-box;
     padding: 3px;
-
   }
 
   :global(.links line) {
@@ -761,6 +810,4 @@ enter.append('text').text('This is some information about whatever')
   }
 </style>
 
-
-
-<div id="chart"></div>
+<div id="chart" />
