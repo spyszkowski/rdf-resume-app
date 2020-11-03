@@ -25,6 +25,7 @@
             {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#startDate']}
             -
             {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#endDate']}<br />
+            {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#jobTitle']}<br />
             {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#jobType']}
         </p>
     </div>
