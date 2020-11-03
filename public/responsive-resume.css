@@ -225,7 +225,7 @@ footer hr {
 }
 
 @media screen and (min-width: 40em) {
-  .experience h2, .experience p {
+  .experience h2, .experience p, .experience li {
     text-align: left;
   }
 }
