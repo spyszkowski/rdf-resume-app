@@ -3,12 +3,16 @@ import { getContext, onMount } from 'svelte';
 
     import { Jumper } from 'svelte-loading-spinners'
     import Education from "./Education.svelte";
+    import WorkHistroy from "./WorkHistory.svelte";
     const { fetchObject } = getContext("repository");
     
-    let cv:any={};
+    let cv:any = {};
+    let workHistoryArr = new Array<any>();
     
     onMount(async () => {
-      cv = await fetchObject("https://pyszkowski.com/Education");
+      cv = await fetchObject("https://pyszkowski.com/cv");
+      workHistoryArr=cv["http://rdfs.org/resume-rdf/cv.rdfs#hasWorkHistory"];
+      console.log(cv);
     });
 
     console.log(fetchObject);
@@ -123,51 +127,14 @@ import { getContext, onMount } from 'svelte';
     
   <!--Experience Tables-->
 
-  <!--
   <section class="experience">
     <h1>Work History</h1>
-    <div class="row">
-      <div class="grid-2">
-        <h2>Company Name</h2>
-        <p>Nov. 2013 - Dec. 2014</p>
-      </div>
-      <div class="grid-4">
-        <ul>
-          <li>implementation of Maven based build process</li>
-          <li>setting up of internal artifacts repository based on Apache Archiva</li>
-          <li>configuration and tuning of the Oracle SOA Suite Application server</li>
-          <li>establishing and maintaining of the project home page</li>						
-        </ul>
-      </div>
-    </div>
-    <div class="row">
-      <div class="grid-2">
-        <h2>Company Name</h2>
-        <p>Sept. 2012 - Nov. 2013</p>
-      </div>
-      <div class="grid-4">
-        <ul>
-          <li>This is a place to give highlights of your work and responsibilities</li>
-          <li>This is a place to give highlights of your work and responsibilities</li>
-          <li>This is a place to give highlights of your work and responsibilities. This is an example of a longer block with more text.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="row">
-      <div class="grid-2">
-        <h2>Company Name</h2>
-        <p>Aug. 2011 - Sept. 2012</p>
-      </div>
-      <div class="grid-4">
-        <ul>
-          <li>This is a place to give highlights of your work and responsibilities</li>
-          <li>This is a place to give highlights of your work and responsibilities</li>
-          <li>This is a place to give highlights of your work and responsibilities. This is an example of a longer block with more text.</li>
-        </ul>
-      </div>
-    </div>
+      {#each workHistoryArr as workHistoryObj}
+        <WorkHistroy workHistoryId={workHistoryObj._id}></WorkHistroy>
+      {/each}
   </section>
-  
+
+  <!--  
   <hr>
   
   <section>
