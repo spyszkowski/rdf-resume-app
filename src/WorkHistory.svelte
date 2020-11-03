@@ -24,7 +24,7 @@
             {company['http://rdfs.org/resume-rdf/cv.rdfs#Country']}<br />
             {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#startDate']}
             -
-            {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#endDate']}<br />
+            {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#isCurrent']?'current':workHistory['http://rdfs.org/resume-rdf/cv.rdfs#endDate']}<br />
             {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#jobTitle']}<br />
             {workHistory['http://rdfs.org/resume-rdf/cv.rdfs#jobType']}
         </p>
