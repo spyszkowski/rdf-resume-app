@@ -4,23 +4,40 @@
   import RdfForceGraph from "./RdfForceGraph.svelte";
   import ResponsiveResume from "./ResponsiveResume.svelte";
   let current = "home";
-
+  let prefixMap:Map<string, string>=new Map();
   setContext("repository", {
-    fetchObject: async (id: string) => {
+    fetchObject: async (id: string, paths:Array<string> = []) => {
       let prodUrl = "https://rdf-resume.herokuapp.com/objects-respository";
       let localUrl = "http://localhost:3033/objects-respository";
 
-      return fetch(prodUrl, {
+      return fetch(localUrl, {
         headers: new Headers({ "Content-Type": "application/json" }),
         method: "POST",
-        body: JSON.stringify({ id: id }),
+        body: JSON.stringify({ id: id, paths:paths}),
       })
         .then((r) => r.json())
         .then((obj) => {
           return obj;
         });
     },
+    registerPrefix(prefix:string, iri:string){
+      prefixMap.set(prefix, iri);
+    }
   });
+
+  function resolveIri(id: string):string{
+    if(/^<.*>$/.test(id)){
+      return id;
+    }else{
+      let parts=id.split(":");
+      if(prefixMap.has(parts[0])){
+        return "<"+prefixMap.get(parts[0])+parts[1]+">";
+      }else{
+        throw new Error(`Prefix ${parts[0]} was not registered.`);
+      }
+    }
+  };
+
 </script>
 
 <style>

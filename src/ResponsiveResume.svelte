@@ -1,29 +1,57 @@
 <script lang="ts">
-import { getContext, onMount } from 'svelte';
+  import { getContext, onMount } from "svelte";
 
-    import { Jumper } from 'svelte-loading-spinners'
-    import Education from "./Education.svelte";
-    import WorkHistroy from "./WorkHistory.svelte";
-    const { fetchObject } = getContext("repository");
-    
-    let cv:any = {};
-    let workHistoryArr = new Array<any>();
-    
-    onMount(async () => {
-      cv = await fetchObject("https://pyszkowski.com/cv");
-      workHistoryArr=cv["http://rdfs.org/resume-rdf/cv.rdfs#hasWorkHistory"];
-      console.log(cv);
+  import { Jumper } from "svelte-loading-spinners";
+  import Education from "./Education.svelte";
+  import WorkHistory from "./WorkHistory.svelte";
+  import SkillGroup from "./SkillGroup.svelte";
+  const { fetchObject } = getContext("repository");
+
+  let cv: any = {};
+  let workHistoryArr = new Array<any>();
+  let skillByCategoryMap = new Map<string, any>();
+
+  onMount(async () => {
+    cv = await fetchObject("https://pyszkowski.com/cv", [
+      "http://rdfs.org/resume-rdf/cv.rdfs#hasSkill",
+    ]);
+    workHistoryArr = cv["http://rdfs.org/resume-rdf/cv.rdfs#hasWorkHistory"];
+    skillByCategoryMap = groupBy(
+      cv["http://rdfs.org/resume-rdf/cv.rdfs#hasSkill"],
+      (skill) =>
+        skill["https://pyszkowski.com/cv.rdfs#skillCategory"]
+          ? skill["https://pyszkowski.com/cv.rdfs#skillCategory"]._id
+          : "Other"
+    );
+
+    console.log("cv", cv);
+    console.log("skillByCategoryMap", skillByCategoryMap);
+  });
+
+  function groupBy(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+      const key = keyGetter(item);
+      if (key) {
+        const collection = map.get(key);
+        if (!collection) {
+          map.set(key, [item]);
+        } else {
+          collection.push(item);
+        }
+      }
     });
+    return map;
+  }
 
-    console.log(fetchObject);
-
+  console.log(fetchObject);
 </script>
 
 <style>
   .container .centeredRow {
     margin: 0 auto;
     width: 10%;
-}
+  }
 </style>
 
 <header>
@@ -42,8 +70,8 @@ import { getContext, onMount } from 'svelte';
       <!--This also might be a good place to link to your resume, email, or portfolio as well.-->
     </p>
   </section>
-  <hr>
-      
+  <hr />
+
   <!--
   <!-- Gallery Block- ->
 
@@ -85,7 +113,8 @@ import { getContext, onMount } from 'svelte';
     </div>
   </section>
 -->
-</div> <!-- End container-->
+</div>
+<!-- End container-->
 
 <!-- Spotlight -->
 <!--
@@ -107,72 +136,42 @@ import { getContext, onMount } from 'svelte';
 
 <!-- New container-->
 
-
-
-{#if !cv._id }
-<div class="container">
-  <section class="center">
-    <div class="centeredRow">
-      <Jumper size="60" color="#FF3E00" unit="px"></Jumper>
+{#if !cv._id}
+  <div class="container">
+    <section class="center">
+      <div class="centeredRow">
+        <Jumper size="60" color="#FF3E00" unit="px" />
+      </div>
+      <p>Waiting for Heroku container to come up ...</p>
+    </section>
   </div>
-    <p>Waiting for Heroku container to come up ...</p>
-  </section>
-</div>
 {:else}
+  <div class="container">
+    <Education />
 
-<div class="container">
-  <Education></Education>
+    <hr />
 
-  <hr>
-    
-  <!--Experience Tables-->
+    <!--Experience Tables-->
 
-  <section class="experience">
-    <h1>Work History</h1>
+    <section class="experience">
+      <h1>Work History</h1>
       {#each workHistoryArr as workHistoryObj}
-        <WorkHistroy workHistoryId={workHistoryObj._id}></WorkHistroy>
+        <WorkHistory workHistoryId={workHistoryObj._id} />
       {/each}
-  </section>
+    </section>
 
-  <!--  
-  <hr>
-  
-  <section>
-    <!- -List of skills- ->
-    <h1>Skills</h1>
-    <div class="row">
-      <div class="grid-2">
+    <hr />
 
-        <ul>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>Javascript</li>
-          <li>Angular.js</li>
-          <li>Photoshop</li>
-          <li>Git</li>
-        </ul>
-      </div>
-      <div class="grid-2">
-        <ul>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>Javascript</li>
-          <li>Angular.js</li>
-          <li>Photoshop</li>
-          <li>Git</li>
-        </ul>
-      </div>
-      <div class="grid-2">
-        <ul>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>Javascript</li>
-          <li>Angular.js</li>
-          <li>Photoshop</li>
-          <li>Git</li>
-        </ul>
-      </div>
-      <!--
+    <section>
+      <!--List of skills-->
+      <h1>Skills</h1>
+      <div class="row">
+        {#each Array.from(skillByCategoryMap.keys()) as categoryId}
+          <SkillGroup
+            {categoryId}
+            skills={skillByCategoryMap.get(categoryId)} />
+        {/each}
+        <!--
       <div class="grid-4">
         <h1>In Conclusion</h1>
         <p>
@@ -183,18 +182,14 @@ import { getContext, onMount } from 'svelte';
           <a href="http://www.twitter.com/philipcdavis">tweet</a> at me.
         </p>
       </div>
-      - ->
-    </div>
-  </section>
-  
-  -->
-  
-  <!--Footer-->
-  <footer class="center">
-    <hr>
-    <span>&copy; Sebastian Pyszkowski 2020</span>
-  </footer>
+      -->
+      </div>
+    </section>
 
-</div>
-
+    <!--Footer-->
+    <footer class="center">
+      <hr />
+      <span>&copy; Sebastian Pyszkowski 2020</span>
+    </footer>
+  </div>
 {/if}
