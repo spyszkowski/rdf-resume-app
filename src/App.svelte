@@ -10,7 +10,7 @@
       let prodUrl = "https://rdf-resume.herokuapp.com/objects-respository";
       let localUrl = "http://localhost:3033/objects-respository";
 
-      return fetch(localUrl, {
+      return fetch(prodUrl, {
         headers: new Headers({ "Content-Type": "application/json" }),
         method: "POST",
         body: JSON.stringify({ id: id, paths:paths}),
